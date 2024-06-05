@@ -27,3 +27,12 @@ You can check out the [create-t3-app GitHub repository](https://github.com/t3-os
 ## How do I deploy this?
 
 Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+
+
+## Useful documentation
+
+Adding environment variables: https://create.t3.gg/en/usage/env-variables#envjs
+
+Using Firebase with Next.js: https://www.freecodecamp.org/news/create-full-stack-app-with-nextjs13-and-firebase/
+
+
