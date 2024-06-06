@@ -3,6 +3,7 @@
 import { useState } from "react"
 import signIn from "@/firebase/auth/signin";
 import signUp from "@/firebase/auth/signup";
+import googleSignIn from "@/firebase/auth/google";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
@@ -48,6 +49,12 @@ export default function Login() {
         processResponse(error, result)
     }
 
+    const handleGoogle = async() => {
+        setErrorMessage("")
+        const { result, error } = await googleSignIn();
+        processResponse(error, result)
+    }
+
     return (
         <>
             <p>I can log you in!</p>
@@ -56,6 +63,11 @@ export default function Login() {
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
             <button onClick={handleRegister}>Register</button>
             <button onClick={handleLogin}>Log in</button>
+
+            <button onClick={handleGoogle}>
+                <img src="/providers/google.png" />
+                Sign in with Google
+            </button>
 
             { errorMessage && <p>{errorMessage}</p>}
         </>
