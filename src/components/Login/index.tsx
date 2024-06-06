@@ -5,6 +5,8 @@ import signIn from "@/firebase/auth/signin";
 import signUp from "@/firebase/auth/signup";
 import googleSignIn from "@/firebase/auth/google";
 import { useRouter } from "next/navigation";
+import addData from "@/firebase/firestore/addData";
+import getDataWithQuery from "@/firebase/firestore/getDataWithQuery";
 
 export default function Login() {
 
@@ -24,7 +26,51 @@ export default function Login() {
         "auth/weak-password": "Your password must be at least six characters."
     }
 
-    const processResponse = (error: null | object, result: null | object) => {
+    // const processResponse = (error: null | object, result: null | object) => {
+    //     if(error) {
+    //         console.log(error)
+    //         setErrorMessage(() => {
+    //             const message: string = errorCodes[error.code] ? errorCodes[error.code] : "Sorry, something has gone wrong. Please try again."
+    //             return message
+    //         })
+    //     } else {
+    //         console.log(result)
+    //         return router.push("/")
+    //     }
+    // }
+
+    const handleRegister = async() => {
+        setErrorMessage("")
+        const { result, error } = await signUp(email, password);
+        if(error) {
+            console.log(error)
+            setErrorMessage(() => {
+                const message: string = errorCodes[error.code] ? errorCodes[error.code] : "Sorry, something has gone wrong. Please try again."
+                return message
+            })
+        } else {
+            console.log(result)
+            const newUser = {
+                userId: result?.user.uid,
+                dispayName: "",
+                profilePicture: "",
+                role: "user",
+                stats: "",
+                hikes: []
+            }
+            const { docRef, error: dataError } = await addData("users", newUser)
+            if(dataError) {
+                console.error(dataError)
+            } else {
+                console.log(docRef?.id)
+            }
+            return router.push("/")
+        }
+    }
+
+    const handleLogin = async() => {
+        setErrorMessage("")
+        const { result, error } = await signIn(email, password);
         if(error) {
             console.log(error)
             setErrorMessage(() => {
@@ -37,22 +83,38 @@ export default function Login() {
         }
     }
 
-    const handleRegister = async() => {
-        setErrorMessage("")
-        const { result, error } = await signUp(email, password);
-        processResponse(error, result)
-    }
-
-    const handleLogin = async() => {
-        setErrorMessage("")
-        const { result, error } = await signIn(email, password);
-        processResponse(error, result)
-    }
-
     const handleGoogle = async() => {
         setErrorMessage("")
         const { result, error } = await googleSignIn();
-        processResponse(error, result)
+        if(error) {
+            console.log(error)
+            setErrorMessage(() => {
+                const message: string = errorCodes[error.code] ? errorCodes[error.code] : "Sorry, something has gone wrong. Please try again."
+                return message
+            })
+        } else {
+            console.log(result)
+            const { querySnapshot, error } = await getDataWithQuery("users", "userId", "==", result?.user.uid)
+            if (error) {
+                console.error(error)
+            } else if (querySnapshot?.empty) {
+                const newUser = {
+                    userId: result?.user.uid,
+                    dispayName: result?.user.displayName,
+                    profilePicture: result?.user.photoURL,
+                    role: "user",
+                    stats: "",
+                    hikes: []
+                }
+                const { docRef, error: dataError } = await addData("users", newUser)
+                if(dataError) {
+                    console.error(dataError)
+                } else {
+                    console.log(docRef?.id)
+                }
+            }
+            return router.push("/")
+        }
     }
 
     return (
