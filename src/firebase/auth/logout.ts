@@ -1,14 +1,10 @@
 import { auth } from "../config";
 import { signOut } from "firebase/auth";
 
-export default async function logOut() {
-    let result = null,
-        error = null;
+export default async function logOut(): Promise<void> {
     try {
-        result = await signOut (auth);
+        await signOut (auth);
     } catch (e) {
-        error = e;
+        console.error(e);
     }
-
-    return { result, error };
 }

@@ -1,17 +1,18 @@
 import { db } from "../config"
-import { doc, getDoc } from "firebase/firestore";
+import { type DocumentReference, type FirestoreError, doc, getDoc } from "firebase/firestore";
+import { type GetDataWithIdResult } from "../models/firestore";
 
-export default async function getDataWithId(collection: string, id: string) {
-    const docRef = doc(db, collection, id);
+export default async function getDataWithId(collection: string, id: string): Promise<GetDataWithIdResult> {
+    const docRef: DocumentReference = doc(db, collection, id);
 
-    let docSnap = null;
-    let error = null;
+    let docSnap = undefined;
+    let error = undefined;
 
     try {
         docSnap = await getDoc(docRef);
     } catch (e) {
-        error = e;
+        error = e as FirestoreError;
     }
 
-    return { docSnap, error };
+    return { docSnap, error } as GetDataWithIdResult;
 }
