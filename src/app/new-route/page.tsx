@@ -1,10 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useId } from "react"
 
 import SelectField from "@/components/FormFields/SelectField";
 import InputField from "@/components/FormFields/InputField";
+import FileField from "@/components/FormFields/FileField";
 import TextAreaField from "@/components/FormFields/TextAreaField";
+
+import fileUpload from "@/firebase/storage/uploadFiles";
 
 interface RouteData {
     routeName: string,
@@ -13,7 +16,7 @@ interface RouteData {
     duration: undefined | number,
     routeDescription: string,
     difficulty: undefined | "Easy" | "Moderate" | "Challenging" | "Extreme",
-    coverPhoto: string
+    coverPhotoUrl: string
 }
 
 export default function NewRoute() {
@@ -25,8 +28,12 @@ export default function NewRoute() {
         duration: undefined,
         routeDescription: "",
         difficulty: undefined,
-        coverPhoto: ""
+        coverPhotoUrl: ""
     });
+
+    const [ coverPhotoFile, setCoverPhotoFile ] = useState<File | null>(null)
+
+    const routeId = useId();
 
     const difficultyScale = [
         "Easy",
@@ -44,6 +51,19 @@ export default function NewRoute() {
         })
     }
 
+    const updateCoverPhoto = (name: string, value: File | null) => {
+        setCoverPhotoFile(value)
+    }
+
+    const handleSubmit = async() => {
+        if(coverPhotoFile) {
+            console.log("RouteId: " + routeId)
+            const fileUrl = await fileUpload(coverPhotoFile, `routes/${routeId}`)
+            console.log("Should be done ...")
+            console.log(fileUrl)
+        }
+    }
+
 
     return (
         <>
@@ -54,7 +74,9 @@ export default function NewRoute() {
             <InputField name="duration" label="Duration" type="number" onValueChange={updateRouteData} />
             <TextAreaField name="routeDescription" label="Route description" onValueChange={updateRouteData} />
             <SelectField name="difficulty" label="Difficulty" options={difficultyScale} onValueChange={updateRouteData}/>
-            <InputField name="coverPhoto" label="Cover Photo" type="file" onValueChange={updateRouteData} /> 
+            <FileField name="coverPhoto" label="Cover Photo" onFileChange={updateCoverPhoto} /> 
+
+            <button onClick={handleSubmit}>Submit</button>
         </>
     )
 }
