@@ -5,13 +5,14 @@ interface InputFieldProps {
     label: string,
     type: string,
     placeholder?: string,
+    value: string | number
     onValueChange: (name: string, value: string | number) => void
 }
 
 
-export default function InputField({ name, label, type, placeholder, onValueChange }: InputFieldProps) {
+export default function InputField({ name, label, type, placeholder, value, onValueChange }: InputFieldProps) {
 
-    const [ fieldValue, setFieldValue ] = useState<string | number>("")
+    const [ fieldValue, setFieldValue ] = useState<string | number>(value)
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
       setFieldValue(e.target.value)
@@ -21,12 +22,17 @@ export default function InputField({ name, label, type, placeholder, onValueChan
       onValueChange(name, fieldValue)
     }, [fieldValue])
 
+    useEffect(() => {
+      setFieldValue(value)
+    }, [value])
+
     return (
         <div className="sm:col-span-4">
           <label htmlFor={name} className="block text-sm font-medium leading-6 text-gray-900">{label}</label>
           <div className="mt-2">
             <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
               <input 
+                required
                 type={type} 
                 name={name} 
                 id={name} 

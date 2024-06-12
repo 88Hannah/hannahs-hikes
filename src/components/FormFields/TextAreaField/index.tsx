@@ -3,12 +3,13 @@ import { type ChangeEvent, useState, useEffect } from "react"
 interface TextAreaFieldProps {
     name: string,
     label: string,
+    value: string,
     onValueChange: (name: string, value: string) => void
 }
 
-export default function TextAreaField({ name, label, onValueChange }: TextAreaFieldProps) {
+export default function TextAreaField({ name, label, value, onValueChange }: TextAreaFieldProps) {
 
-  const [fieldValue, setFieldValue] = useState<string>("")
+  const [fieldValue, setFieldValue] = useState<string>(value)
 
   const onChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setFieldValue(e.target.value)
@@ -17,6 +18,10 @@ export default function TextAreaField({ name, label, onValueChange }: TextAreaFi
   useEffect(() => {
     onValueChange(name, fieldValue)
   }, [fieldValue])
+
+  useEffect(() => {
+    setFieldValue(value)
+  }, [value])
 
     return (
         <div className="col-span-full">
