@@ -5,6 +5,11 @@ export interface AddDataResult {
     error?: FirestoreError
 }
 
+export interface GetEntireCollectionResult {
+    querySnapshot?: QuerySnapshot,
+    error?: FirestoreError
+}
+
 export interface GetDataWithIdResult {
     docSnap?: DocumentSnapshot,
     error?: FirestoreError
