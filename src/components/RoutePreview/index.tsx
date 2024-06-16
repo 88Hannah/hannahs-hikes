@@ -1,14 +1,16 @@
+import Link from "next/link"
+
 interface RoutePreviewProps { 
-    key: string,
+    routeId: string,
     routeName: string, 
     routeImg: string
 }
 
-export default function RoutePreview({ key, routeName, routeImg }: RoutePreviewProps) {
+export default function RoutePreview({ routeId, routeName, routeImg }: RoutePreviewProps) {
     return (
-        <div key={key}>
+        <Link href={`/routes/${routeId}`}>
             <img src={routeImg} alt={routeName} />
             <h3>{routeName}</h3>
-        </div>
+        </Link>
     )
 }

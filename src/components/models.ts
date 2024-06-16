@@ -10,3 +10,14 @@ export interface User {
 export interface Hike {
     length: number;
 }
+
+export interface Route {
+    id?: string,
+    coverPhotoUrl: string, 
+    difficulty: string,
+    distance: number,
+    duration: number,
+    meetingPoint: string,
+    routeDescription: string,
+    routeName: string
+}
