@@ -39,11 +39,12 @@ export default function Login() {
             console.log(user)
             const newUser: User = {
                 userId: user.uid,
-                dispayName: "",
+                displayName: "",
                 profilePicture: "",
                 role: "user",
                 stats: {},
-                hikes: []
+                hikes: [],
+                email: user.email!
             }
             const { docRef, error: dataError } = await addData("users", newUser)
             if(dataError) {
@@ -86,11 +87,12 @@ export default function Login() {
             } else if (querySnapshot?.empty) {
                 const newUser: User = {
                     userId: user.uid,
-                    dispayName: user.displayName,
+                    displayName: user.displayName,
                     profilePicture: user.photoURL,
                     role: "user",
                     stats: {},
-                    hikes: []
+                    hikes: [],
+                    email: user.email!
                 }
                 const { docRef, error: dataError } = await addData("users", newUser)
                 if(dataError) {
