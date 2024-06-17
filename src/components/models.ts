@@ -1,10 +1,14 @@
+export type Role = "user" | "leader" | "admin"
+
 export interface User {
     userId: string,
-    dispayName: string | null,
+    displayName: string | null,
     profilePicture: string | null,
-    role: "user" | "leader" | "admin",
+    role: Role,
     stats: object,
-    hikes: Hike[]
+    hikes: Hike[],
+    email: string,
+    id?: string
 }
 
 export interface Hike {
