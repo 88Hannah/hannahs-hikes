@@ -2,17 +2,17 @@
 
 import getLiveData from "@/firebase/firestore/getLiveData"
 import { useEffect, useState } from "react"
-import User from "../User"
-import { type User as UserModel } from "../models"
+import MemberItem from "../MemberItem"
+import { type FetchedMember } from "../models"
 import { type FirestoreError } from "firebase/firestore"
 
 export default function Users() {
 
-    const [ users, setUsers ] = useState<UserModel[]>([])
+    const [ members, setMembers ] = useState<FetchedMember[]>([])
 
-    const onData = (data: UserModel[]) => {
+    const onData = (data: FetchedMember[]) => {
         console.log("Received data: ", data);
-        setUsers(data)
+        setMembers(data)
       };
       
       const onError = (error: FirestoreError) => {
@@ -20,14 +20,14 @@ export default function Users() {
       };
 
     useEffect(() => {
-        const unsubscribe = getLiveData("users", onData, onError);
+        const unsubscribe = getLiveData("members", onData, onError);
 
         return unsubscribe
     }, [])
 
-    const usersHtml = users.map(user => {
+    const membersHtml = members.map(member => {
         return (
-            <User key={user.id} user={user}/>
+            <MemberItem key={member.id} member={member}/>
         )
     })
 
@@ -35,7 +35,7 @@ export default function Users() {
     return (
         <>
             <h2>Here are all the users</h2>
-            {usersHtml}
+            {membersHtml}
         </>
     )
 }

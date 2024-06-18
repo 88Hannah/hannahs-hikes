@@ -1,4 +1,4 @@
-export type Role = "user" | "leader" | "admin"
+export type Role = "basic" | "leader" | "admin"
 
 export interface User {
     userId: string,
@@ -10,6 +10,31 @@ export interface User {
     email: string,
     id?: string
 }
+
+export interface MemberDetails {
+    bio: string,
+    favRoute: string
+}
+
+export interface MemberStats {
+    noHikes: number,
+    totalDistance: number
+}
+
+export interface Member {
+    displayName: string | null,
+    profileUrl: string | null,
+    email: string,
+    role: Role,
+    details: MemberDetails | null,
+    stats: MemberStats | null,
+    hikes: Hike[]
+}
+
+export interface FetchedMember extends Member {
+    id: string
+}
+
 
 export interface Hike {
     length: number;

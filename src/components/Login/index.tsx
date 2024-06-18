@@ -5,9 +5,11 @@ import signIn from "@/firebase/auth/signin";
 import signUp from "@/firebase/auth/signup";
 import googleSignIn from "@/firebase/auth/google";
 import { useRouter } from "next/navigation";
-import addData from "@/firebase/firestore/addData";
-import getDataWithQuery from "@/firebase/firestore/getDataWithQuery";
-import { type User } from "../models";
+import { type MemberDetails, type MemberStats } from "../models";
+import { type Member } from "../models";
+import { type User } from "firebase/auth";
+import addDataWithDocId from "@/firebase/firestore/addDataWithDocId";
+import getDataWithId from "@/firebase/firestore/getDataWithId";
 
 export default function Login() {
 
@@ -25,7 +27,26 @@ export default function Login() {
         "auth/invalid-password": "Sorry, this password is invalid. It must contain at least six characters.",
         "auth/user-not-found": "Sorry, this user is not recognised.",
         "auth/weak-password": "Your password must be at least six characters."
-    }                                                                                                                                                                                                                                                                                                                                                             
+    }               
+    
+    const createNewMember = async(user: User):Promise<void> => {
+        const newMember = {
+                displayName: user.displayName,
+                profileUrl: user.photoURL,
+                email: user.email!,
+                role: "basic",
+                details: {} as MemberDetails,
+                stats: {} as MemberStats,
+                hikes: [],
+        } as Member
+
+        const { docRef, error: dataError } = await addDataWithDocId("members", user.uid, newMember)
+            if(dataError) {
+                console.error(dataError)
+            } else if(docRef) {
+                console.log(docRef.id)
+            }
+    }
 
     const handleRegister = async(): Promise<void> => {
         setErrorMessage("")
@@ -36,22 +57,7 @@ export default function Login() {
                 return errorCodes[error.code] ?? "Sorry, something has gone wrong. Please try again."
             })
         } else if (user){
-            console.log(user)
-            const newUser: User = {
-                userId: user.uid,
-                displayName: "",
-                profilePicture: "",
-                role: "user",
-                stats: {},
-                hikes: [],
-                email: user.email!
-            }
-            const { docRef, error: dataError } = await addData("users", newUser)
-            if(dataError) {
-                console.error(dataError)
-            } else if(docRef) {
-                console.log(docRef.id)
-            }
+            await createNewMember(user)
             router.push("/")
         }
     }
@@ -65,8 +71,8 @@ export default function Login() {
             setErrorMessage(() => {
                 return errorCodes[error.code] ?? "Sorry, something has gone wrong. Please try again."
             })
-        } else {
-            console.log(user)
+        } else if (user){
+            console.log(user.uid)
             router.push("/")
         }
     }
@@ -80,26 +86,11 @@ export default function Login() {
                 return errorCodes[error.code] ?? "Sorry, something has gone wrong. Please try again."
             })
         } else if (user){
-            console.log(user)
-            const { querySnapshot, error } = await getDataWithQuery("users", "userId", "==", user.uid)
+            const { docSnap, error } = await getDataWithId("members", user.uid)
             if (error) {
                 console.error(error)
-            } else if (querySnapshot?.empty) {
-                const newUser: User = {
-                    userId: user.uid,
-                    displayName: user.displayName,
-                    profilePicture: user.photoURL,
-                    role: "user",
-                    stats: {},
-                    hikes: [],
-                    email: user.email!
-                }
-                const { docRef, error: dataError } = await addData("users", newUser)
-                if(dataError) {
-                    console.error(dataError)
-                } else if(docRef) {
-                    console.log(docRef.id)
-                }
+            } else if (!docSnap?.exists()) {
+                await createNewMember(user)
             }
             router.push("/")
         }
