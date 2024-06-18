@@ -1,3 +1,16 @@
+# In development
+This project is currently being worked on.
+
+- Next.js app
+- It will be styled with Tailwind CSS
+- Uses Firebase for authentication, storage and database
+
+---------------------------------------------------------------------
+
+
+
+
+
 # Create T3 App
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
