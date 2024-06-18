@@ -1,12 +1,12 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { type Member } from "../models"
+import { type FetchedMember } from "../models"
 import getDataWithId from "@/firebase/firestore/getDataWithId"
 
 export default function MemberDetails({ userId }: { userId: string }) {
 
-    const [ memberDetails, setMemberDetails ] = useState<Member>({} as Member)
+    const [ memberDetails, setMemberDetails ] = useState<FetchedMember>({} as FetchedMember)
 
     useEffect(() => {
         const getMemberDetails = async() => {
@@ -15,7 +15,7 @@ export default function MemberDetails({ userId }: { userId: string }) {
                 console.error(error)
             } else if (docSnap?.exists()) {
                 console.log("The snapshot exits")
-                setMemberDetails(docSnap.data() as Member)
+                setMemberDetails(docSnap.data() as FetchedMember)
             }
         }
 
@@ -35,10 +35,16 @@ export default function MemberDetails({ userId }: { userId: string }) {
                     <p>{memberDetails.email}</p>
                     <h4>Profile picture</h4>
                     <img src={memberDetails.profileUrl ?? "/default-images/default-profile-picture.jpg"} alt="profile picture"/>
-                    <h4>Role</h4>
-                    <p>{memberDetails.role}</p>
-                    <h4>Display name</h4>
-                    <p>{memberDetails.displayName}</p>
+                    <h4>My bio</h4>
+                    <p>{memberDetails.details?.bio ?? "Not complete"}</p>
+                    <h4>My favourite hike</h4>
+                    <p>{memberDetails.details?.favRoute ?? "Not complete"}</p>
+
+                    {
+                        memberDetails.role != "basic" &&
+                        <p>You are registered as: {memberDetails.role}</p>
+                    }
+
 
                 </div>
             }
