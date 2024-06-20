@@ -1,52 +1,63 @@
 import updateData from "@/firebase/firestore/updateData"
-import SelectField from "../FormFields/SelectField"
 import {type FetchedMember, type Role } from "../models"
 import { useState, useEffect } from "react"
+import Checkbox from "../FormFields/Checkbox"
 
 export default function MemberItem({ member }: { member: FetchedMember }) {
 
-    const [ role, setRole ] = useState<Role>(member.role)
-
-    const roles = [
-        {
-            value: "basic",
-            disabled: false,
-            selected: member.role == "basic"
-        },
-        {
-            value: "leader",
-            disabled: false,
-            selected: member.role == "leader"
-        },
-        {
-            value: "admin",
-            disabled: false,
-            selected: member.role == "admin"
-        }
-    ]
+    const [ roles, setRoles ] = useState<Role[]>(member.roles)
 
     
-    const updateMemberRole = (name: string, value: string) => {
-        setRole(value as Role)
+    const updateMemberRole = (name: Role, value: boolean) => {
+        setRoles((prevRoles) => {
+            if(value) {
+                if(prevRoles.includes(name)) return prevRoles
+                else return [name, ...prevRoles]
+            } else {
+                return prevRoles.filter(role => role != name)
+            }
+        })
     }
     
     useEffect(() => {
         const updateUser = async () => {
             console.log("Update the role!")
             const newData = {
-                role: role
+                roles: roles
             }
             await updateData("members", member.id, newData)
         }
 
         void updateUser()
-    }, [role])
+    }, [roles])
 
     return (
         <>
             <p>{member.displayName}</p>
             <p>{member.email}</p>
-            <SelectField name="role" label="role" options={roles} value={role} onValueChange={(updateMemberRole)}/>
+            {   roles &&
+                <div>
+                    <Checkbox
+                        name="admin"
+                        label="Admin"
+                        isSelected={roles.includes("admin")}
+                        onCheckboxChange={updateMemberRole}
+                    />
+                    <Checkbox
+                        name="leader"
+                        label="Leader"
+                        isSelected={roles.includes("leader")}
+                        onCheckboxChange={updateMemberRole}
+                    />
+                    <Checkbox
+                        name="basic"
+                        label="Basic"
+                        isSelected={roles.includes("basic")}
+                        onCheckboxChange={updateMemberRole}
+                    />
+                </div>
+
+            }
         </>
     )
 }
