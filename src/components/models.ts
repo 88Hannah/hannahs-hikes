@@ -25,19 +25,31 @@ export interface Member {
     displayName: string | null,
     profileUrl: string | null,
     email: string,
-    role: Role,
+    roles: Role[],
     details: MemberDetails | null,
     stats: MemberStats | null,
-    hikes: Hike[]
+    hikes: Hike[],
+    createdUtc: string,
+    updatedUtc: string
 }
 
 export interface FetchedMember extends Member {
     id: string
 }
 
+export type HikeStatus = "scheduled" | "in progress" | "completed" | "cancelled" | "postponed";
 
 export interface Hike {
-    length: number;
+    routeId: string,
+    startTime: string,
+    leader: string,
+    participants: string[],
+    createdUtc: string,
+    updatedUtc: string,
+    createdBy: string,
+    updatedBy: string
+    status: HikeStatus
+
 }
 
 export interface Route {
@@ -48,5 +60,9 @@ export interface Route {
     duration: number,
     meetingPoint: string,
     routeDescription: string,
-    routeName: string
+    routeName: string,
+    createdUtc: string,
+    updatedUtc: string,
+    createdBy: string,
+    updatedBy: string
 }

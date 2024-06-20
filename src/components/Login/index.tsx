@@ -10,6 +10,7 @@ import { type Member } from "../models";
 import { type User } from "firebase/auth";
 import addDataWithDocId from "@/firebase/firestore/addDataWithDocId";
 import getDataWithId from "@/firebase/firestore/getDataWithId";
+import { getCurrentUtcTime } from "@/utils/dateUtils";
 
 export default function Login() {
 
@@ -34,10 +35,12 @@ export default function Login() {
                 displayName: user.displayName,
                 profileUrl: user.photoURL,
                 email: user.email!,
-                role: "basic",
+                roles: ["basic"],
                 details: {} as MemberDetails,
                 stats: {} as MemberStats,
                 hikes: [],
+                createdUtc: getCurrentUtcTime(),
+                updatedUtc: getCurrentUtcTime()
         } as Member
 
         const { docRef, error: dataError } = await addDataWithDocId("members", user.uid, newMember)

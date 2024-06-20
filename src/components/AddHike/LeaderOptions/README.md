@@ -1,0 +1,1 @@
+If the leader has no display name then they can't be chosen to be the leader. 

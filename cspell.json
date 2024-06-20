@@ -1,0 +1,9 @@
+{
+    "version": "0.2",
+    "ignorePaths": ["node_modules/**"],
+    "dictionaryDefinitions": [],
+    "dictionaries": ["en-gb"],
+    "words": [],
+    "ignoreWords": ["firestore", "datepicker"],
+    "import": []
+}

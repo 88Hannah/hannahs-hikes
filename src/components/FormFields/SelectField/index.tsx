@@ -1,6 +1,7 @@
 import { type ChangeEvent, useState, useEffect } from "react"
 
 interface SelectData {
+  id: string,
   value: string,
   disabled: boolean,
   selected: boolean
@@ -32,9 +33,9 @@ export default function SelectField({ name, label, options, value, onValueChange
 
   const optionsHtml = options.map((option, index) => {
     if(option.disabled) {
-      return <option key={index} value={option.value} disabled>{option.value}</option>
+      return <option key={index} value={option.id} disabled>{option.value}</option>
     } else {
-      return <option key={index} value={option.value}>{option.value}</option>
+      return <option key={index} value={option.id}>{option.value}</option>
     }
   })
 

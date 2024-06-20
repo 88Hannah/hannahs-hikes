@@ -8,6 +8,7 @@ import TextAreaField from "../FormFields/TextAreaField"
 import FileField from "../FormFields/FileField"
 import fileUpload from "@/firebase/storage/uploadFiles"
 import updateData from "@/firebase/firestore/updateData"
+import { getCurrentUtcTime } from "@/utils/dateUtils"
 
 export default function UpdateMember({ userId, finishedEditing }: { userId: string, finishedEditing: () => void }) {
 
@@ -48,6 +49,7 @@ export default function UpdateMember({ userId, finishedEditing }: { userId: stri
                 updateMemberData("profileUrl", fileUrl)
             } 
         }
+        updateMemberData("updatedUtc", getCurrentUtcTime())
         setFormSubmitted(true)
     }
 
