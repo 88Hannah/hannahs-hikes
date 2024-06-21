@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import { AuthContextProvider } from "@/context/AuthContext"
 
 import { GeistSans } from "geist/font/sans";
+import Header from "@/components/Header";
 
 export const metadata = {
   title: "Create T3 App",
@@ -18,6 +19,7 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <AuthContextProvider>
+          <Header />
           {children}
         </AuthContextProvider>  
       </body>
