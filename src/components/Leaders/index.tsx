@@ -23,7 +23,7 @@ export default function Leaders() {
 
     useEffect(() => {
         const getLeaders = async () => {
-            const { querySnapshot, error } = await getDataWithQuery("members", "role", "==", "leader")
+            const { querySnapshot, error } = await getDataWithQuery("members", "roles", "array-contains", "leader")
 
             if (!error && querySnapshot) {
                 setLeaders(querySnapshot?.docs.map(doc => ({ id: doc.id, ...doc.data()})))
