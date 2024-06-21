@@ -16,7 +16,7 @@ export default function Profile() {
 
     useEffect(() => {
         setCurrentUser(user as User)
-    }, [])
+    }, [user])
 
     const handleLoginClick = () => {
         router.push("/login")

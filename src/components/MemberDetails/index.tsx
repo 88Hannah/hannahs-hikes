@@ -40,10 +40,15 @@ export default function MemberDetails({ userId }: { userId: string }) {
                     <h4>My favourite hike</h4>
                     <p>{memberDetails.details?.favRoute ?? "Not complete"}</p>
 
-                    {
-                        memberDetails.role != "basic" &&
-                        <p>You are registered as: {memberDetails.role}</p>
-                    }
+                    
+                        
+                    <p>You have the following special roles:</p>
+                    {memberDetails.roles?.map(role => {
+                        if(role != "basic") {
+                            return <p key={role}>{role}</p>
+                        }
+                    })}
+                    
 
 
                 </div>
