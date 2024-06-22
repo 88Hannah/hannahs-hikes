@@ -37,6 +37,7 @@ export default function useRoles() {
     return {
         hasRole,
         hasAnyRole,
-        hasAllRoles
+        hasAllRoles,
+        userRoles
     }
 }

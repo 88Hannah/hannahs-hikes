@@ -9,6 +9,8 @@ import TextAreaField from "@/components/FormFields/TextAreaField";
 import { type Route } from "@/components/models";
 import { useAuthContext } from "@/context/AuthContext";
 import { getCurrentUtcTime } from "@/utils/dateUtils"; 
+import { useRouter } from "next/navigation";
+import useRoles from "@/hooks/useRoles"
 
 import fileUpload from "@/firebase/storage/uploadFiles";
 import addData from "@/firebase/firestore/addData";
@@ -23,6 +25,8 @@ interface SelectData {
 export default function NewRoute() {
 
     const { user } = useAuthContext()
+    const router = useRouter();
+    const { hasRole, userRoles } = useRoles()
 
     const difficultyScale: Array<SelectData> = [
         // "Easy",
@@ -145,12 +149,25 @@ export default function NewRoute() {
 
     }, [formSubmitted, routeData])
 
+    useEffect(() => {
+        if(!user) {
+            router.push("/")
+        } else if (user && userRoles.length > 0) {
+            if (!hasRole("admin")) {
+                router.push("/")
+            }
+        }
+    }, [user, userRoles])
+
 
     return (
         <>
             <h1>Upload a new route here</h1>
 
-            {user ?
+            {
+                userRoles.length === 0 ?
+                    <div>Loading ...</div>
+                    : (user && hasRole("admin")) &&
                 <>
                     <form action={handleSubmit}>
                         <InputField name="routeName" label="Route name" type="text" value={routeData.routeName} onValueChange={updateRouteData} />
@@ -166,7 +183,6 @@ export default function NewRoute() {
 
                     {message && <p>{message}</p>}
                 </>
-                : <p>You must be logged in as an admin member to upload new routes</p>
             }
         </>
     )
