@@ -20,7 +20,9 @@ export default function RootLayout({
       <body>
         <AuthContextProvider>
           <Header />
-          {children}
+          <main className="pt-20 pb-10 px-3">
+            {children}
+          </main>
         </AuthContextProvider>  
       </body>
     </html>

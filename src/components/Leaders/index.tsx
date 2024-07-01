@@ -49,7 +49,9 @@ export default function Leaders() {
     return (
         <>
             {showModal && <LeaderModal leaderId={highlightedLeader} setShowModal={setShowModal}/>}
-            {leadersHtml}
+            <div className="flex flex-wrap w-full justify-center gap-3">
+                {leadersHtml}
+            </div>
         </>
     )
 }
