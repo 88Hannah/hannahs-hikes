@@ -17,10 +17,10 @@ const auth: Auth = getAuth(app);
 const db: Firestore = getFirestore(app);
 const storage: FirebaseStorage = getStorage(app);
 
-if (process.env.NODE_ENV === 'development') {
-  connectAuthEmulator(auth, 'http://localhost:9099');
-  connectFirestoreEmulator(db, 'localhost', 8080);
-  connectStorageEmulator(storage, 'localhost', 9199);
-}
+// if (process.env.NODE_ENV === 'development') {
+//   connectAuthEmulator(auth, 'http://localhost:9099');
+//   connectFirestoreEmulator(db, 'localhost', 8080);
+//   connectStorageEmulator(storage, 'localhost', 9199);
+// }
 
 export { auth, db, storage }
