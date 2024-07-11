@@ -36,8 +36,8 @@ export default function Routes() {
             : <p>No routes found</p>
 
     return (
-        <>
+        <div className="flex flex-wrap w-full justify-start gap-3">
             {routesHtml}
-        </>
+        </div>
     )
 }
