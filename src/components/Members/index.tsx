@@ -1,6 +1,6 @@
 "use client"
 
-import getLiveData from "@/firebase/firestore/getLiveData"
+import getLiveCollectionData from "@/firebase/firestore/getLiveCollectionData"
 import { useEffect, useState } from "react"
 import MemberItem from "../MemberItem"
 import { type FetchedMember } from "../models"
@@ -20,7 +20,7 @@ export default function Users() {
       };
 
     useEffect(() => {
-        const unsubscribe = getLiveData("members", onData, onError);
+        const unsubscribe = getLiveCollectionData("members", onData, onError);
 
         return unsubscribe
     }, [])

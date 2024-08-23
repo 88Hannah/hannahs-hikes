@@ -49,7 +49,10 @@ export interface Hike {
     createdBy: string,
     updatedBy: string
     status: HikeStatus
+}
 
+export interface FetchedHike extends Hike {
+    id: string
 }
 
 export interface Route {

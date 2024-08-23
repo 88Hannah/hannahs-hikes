@@ -25,7 +25,7 @@ import { type GetLiveDataResult } from "../models/firestore";
 // }
 
 
-export default function getLiveData(
+export default function getLiveCollectionData(
   collectionName: string,
   onData: (data: any) => void,
   onError: (error: FirestoreError) => void
